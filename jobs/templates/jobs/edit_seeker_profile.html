@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width:700px;margin-top:40px;">
+
+<h1>Edit Profile</h1>
+
+<form method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+<div>
+<label>Full Name</label>
+{{ form.full_name }}
+</div>
+
+<div>
+<label>Bio</label>
+{{ form.bio }}
+</div>
+
+<div>
+<label>Location</label>
+{{ form.location }}
+</div>
+
+<div>
+<label>Profile Picture</label>
+{{ form.avatar }}
+</div>
+
+<div>
+<label>Upload CV</label>
+{{ form.cv }}
+</div>
+
+<div>
+<label>LinkedIn URL</label>
+{{ form.linkin_url }}
+</div>
+
+<div>
+<label>Portfolio URL</label>
+{{ form.portfolio_url }}
+</div>
+
+<div>
+<label>Skills</label>
+<input type="text" name="skills_input" placeholder="Python, Django, React, HTML, CSS, JavaScript, Tailwind CSS, PHP">
+</div>
+
+<div>
+<label>Open To Work</label>
+{{ form.is_open_to_work }}
+</div>
+
+<br>
+
+<button type="submit" class="btn btn-primary">
+Save Changes
+</button>
+
+<a href="{% url 'seeker_dashboard' %}" class="btn btn-secondary">
+Cancel
+</a>
+
+</form>
+
+</div>
+
+{% endblock %}

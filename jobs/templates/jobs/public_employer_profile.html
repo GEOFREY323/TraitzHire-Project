@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width:900px;margin-top:40px;">
+
+<div class="card" style="padding:30px;">
+
+<div style="display:flex;align-items:center;gap:20px;">
+
+{% if employer.logo %}
+<img src="{{ employer.logo.url }}" width="120" height="120">
+{% endif %}
+
+<div>
+
+<h2>
+{{ employer.company_name }}
+
+{% if employer.is_verified %}
+<span style="color:green;font-size:16px;">✔ Verified</span>
+{% endif %}
+
+</h2>
+
+<p><strong>Location:</strong> {{ employer.location }}</p>
+
+{% if employer.company_size %}
+<p><strong>Company Size:</strong> {{ employer.company_size }}</p>
+{% endif %}
+
+{% if employer.website_url %}
+<p>
+<strong>Website:</strong>
+<a href="{{ employer.website_url }}" target="_blank">
+{{ employer.website_url }}
+</a>
+</p>
+{% endif %}
+
+</div>
+
+</div>
+
+<hr style="margin:20px 0;">
+
+<h3>About Company</h3>
+
+<p>
+{{ employer.description }}
+</p>
+
+<hr style="margin:20px 0;">
+
+<h3>Open Jobs</h3>
+
+{% if jobs %}
+
+<ul>
+
+{% for job in jobs %}
+
+<li style="margin-bottom:15px;">
+
+<a href="{% url 'job_detail' job.pk %}">
+<strong>{{ job.title }}</strong>
+</a>
+
+<p>{{ job.location }}</p>
+
+</li>
+
+{% endfor %}
+
+</ul>
+
+{% else %}
+
+<p>No active jobs available.</p>
+
+{% endif %}
+
+</div>
+
+</div>
+
+{% endblock %}

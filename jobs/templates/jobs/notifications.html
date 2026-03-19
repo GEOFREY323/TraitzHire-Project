@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Your Notifications</h2>
+
+{% if notifications %}
+
+<ul>
+
+{% for notification in notifications %}
+
+<li>
+
+<p>{{ notification.message }}</p>
+
+<small>{{ notification.created_at }}</small>
+
+{% if notification.link %}
+<br>
+<a href="{{ notification.link }}">View</a>
+{% endif %}
+
+</li>
+
+<hr>
+
+{% endfor %}
+
+</ul>
+
+{% else %}
+
+<p>No notifications yet.</p>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>My Applications</h1>
+
+{% for app in applications %}
+
+<div class="card">
+
+<h3>{{ app.job.title }}</h3>
+
+<p>{{ app.job.employer.company_name }}</p>
+
+<p>Status: {{ app.status }}</p>
+
+<a href="{% url 'withdraw_application' app.pk %}">
+Withdraw Application
+</a>
+
+</div>
+
+{% empty %}
+
+<p>You have not applied for any jobs yet.</p>
+
+{% endfor %}
+
+{% endblock %}

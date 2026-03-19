@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width:800px;margin-top:40px;">
+
+<div class="card">
+
+<h1>Applicant Details</h1>
+
+<p style="margin-top:10px;">
+<strong>Applicant:</strong> {{ application.applicant.username }}
+</p>
+
+<p>
+<strong>Applied for:</strong> {{ application.job.title }}
+</p>
+
+<p>
+<strong>Status:</strong> {{ application.status }}
+</p>
+
+<hr style="margin:20px 0;">
+
+<h3>Cover Letter</h3>
+
+<p style="line-height:1.6;">
+{{ application.cover_letter }}
+</p>
+
+<hr style="margin:20px 0;">
+
+<h3>Curriculum Vitae</h3>
+
+<a href="{{ application.cv.url }}" class="btn btn-primary" target="_blank">
+Download CV
+</a>
+
+<hr style="margin:20px 0;">
+
+<h3>Update Application Status</h3>
+
+<form method="POST" action="{% url 'update_status' application.pk %}">
+
+{% csrf_token %}
+
+<select name="status" style="padding:8px; margin-right:10px;">
+
+<option value="Pending" {% if application.status == "Pending" %}selected{% endif %}>
+Pending
+</option>
+
+<option value="Reviewed" {% if application.status == "Reviewed" %}selected{% endif %}>
+Reviewed
+</option>
+
+<option value="Accepted" {% if application.status == "Accepted" %}selected{% endif %}>
+Accepted
+</option>
+
+<option value="Rejected" {% if application.status == "Rejected" %}selected{% endif %}>
+Rejected
+</option>
+
+</select>
+
+<button type="submit" class="btn btn-primary">
+Update Status
+</button>
+
+</form>
+
+<hr style="margin:20px 0;">
+
+<a href="{% url 'manage_applicants' application.job.pk %}" class="btn btn-secondary">
+Back to Applicants
+</a>
+
+</div>
+
+</div>
+
+{% endblock %}

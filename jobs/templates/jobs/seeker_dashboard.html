@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-wrapper">
+
+<h1>Job Seeker Dashboard</h1>
+
+<div class="dashboard-layout">
+
+<!-- Sidebar -->
+
+<div class="card">
+
+<h3>Navigation</h3>
+
+<ul style="list-style:none; margin-top:1rem; line-height:2;">
+
+<li><a href="{% url 'saved_jobs' %}">Saved Jobs</a></li>
+
+<li><a href="{% url 'seeker_dashboard' %}">Dashboard</a></li>
+
+<li><a href="{% url 'my_applications' %}">My Applications</a></li>
+
+<li><a href="{% url 'recommended_jobs' %}">Recommended Jobs</a></li>
+
+<li><a href="{% url 'notifications' %}">Notifications</a></li>
+
+<li><a href="{% url 'edit_seeker_profile' %}">Edit Profile</a></li>
+
+</ul>
+
+</div>
+
+<!-- Main Content -->
+
+<div>
+
+<div class="card card-accent">
+<h3>Welcome {{ request.user.username }}</h3>
+<p>Track your job applications and opportunities.</p>
+</div>
+
+<div class="card card-accent-yellow" style="margin-top:1rem;">
+<h3>Recent Jobs</h3>
+<div class="card" style="margin-top:1.5rem;">
+
+<h3>Find Jobs</h3>
+<form method="GET" style="margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap;">
+
+<input type="text" name="keyword" placeholder="Keyword"
+value="{{ request.GET.keyword }}">
+
+<input type="text" name="location" placeholder="Location"
+value="{{ request.GET.location }}">
+
+<select name="job_type">
+<option value="">All Types</option>
+
+<option value="full-time" {% if request.GET.job_type == "full-time" %}selected{% endif %}>Full Time</option>
+<option value="part-time" {% if request.GET.job_type == "part-time" %}selected{% endif %}>Part Time</option>
+<option value="remote" {% if request.GET.job_type == "remote" %}selected{% endif %}>Remote</option>
+<option value="contract" {% if request.GET.job_type == "contract" %}selected{% endif %}>Contract</option>
+
+</select>
+
+<select name="category">
+<option value="">All Categories</option>
+
+{% for cat in categories %}
+<option value="{{ cat.id }}"
+{% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+{{ cat.name }}
+</option>
+{% endfor %}
+
+</select>
+
+<button type="submit" class="btn btn-primary">Search</button>
+
+</form>
+
+<hr>
+
+{% if jobs %}
+{% for job in jobs %}
+
+<div class="card" style="padding:15px;margin-bottom:10px;">
+
+<h4>{{ job.title }}</h4>
+
+<p>{{ job.employer.company_name }}</p>
+
+<p>📍 {{ job.location }}</p>
+
+<p>💼 {{ job.get_job_type_display }}</p>
+
+{% if job.category %}
+<p>📂 {{ job.category.name }}</p>
+{% endif %}
+
+{% if job.salary_min and job.salary_max %}
+<p>💰 ${{ job.salary_min }} - ${{ job.salary_max }}</p>
+{% endif %}
+
+<a href="{% url 'job_detail' job.pk %}" class="btn btn-secondary">
+View Details
+</a>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+<p>No jobs found</p>
+{% endif %}
+
+</div>
+
+{% for app in applications %}
+<p>
+{{ app.job.title }}
+<span class="badge status-pending">{{ app.status }}</span>
+</p>
+{% empty %}
+<p>No applications yet.</p>
+{% endfor %}
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

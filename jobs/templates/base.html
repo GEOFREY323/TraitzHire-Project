@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TraitzHire</title>
+
+<link rel="stylesheet" href="{% static 'jobs/css/style.css' %}">
+
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap' rel='stylesheet'>
+
+</head>
+
+<body>
+
+<nav class='navbar'>
+  <div class='navbar-inner'>
+
+    <a href="{% url 'home' %}" class='navbar-brand'>
+      Traitz<span>Hire</span>
+    </a>
+
+    <div class='navbar-links'>
+
+      {% if user.is_authenticated %}
+
+        <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button 
+                type="submit" 
+                style="background:none;border:none;color:inherit;cursor:pointer;padding:0;">
+                Logout
+            </button>
+        </form>
+
+        {% if user.jobseekerprofile %}
+          <a href="{% url 'seeker_dashboard' %}">My Dashboard</a>
+          <a href="{% url 'recommended_jobs' %}">Recommended Jobs</a>
+          <a href="{% url 'notifications' %}">Notifications</a>
+
+        {% elif user.employerprofile %}
+          <a href="{% url 'employer_dashboard' %}">Dashboard</a>
+          <a href="{% url 'create_job' %}">Post a Job</a>
+          <a href="{% url 'edit_employer_profile' %}">Edit Profile</a>
+        {% else %}
+          <a href="{% url 'choose_role' %}">Create Profile</a>
+        {% endif %}
+
+      {% else %}
+
+        <a href="{% url 'login' %}">Log In</a>
+        <a href="{% url 'register' %}" class="btn btn-primary btn-sm">Sign Up</a>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+</nav>
+
+<div class="page-wrapper">
+
+{% if messages %}
+<div class="messages-wrapper">
+
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">
+{{ message }}
+</div>
+{% endfor %}
+
+</div>
+{% endif %}
+
+{% block content %}
+{% endblock %}
+
+</div>
+
+<script src="{% static 'jobs/js/main.js' %}"></script>
+
+</body>
+</html>
