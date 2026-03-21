@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 #Reads SECRET_KEY from .env, raises error if missing
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost', cast=Csv())
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost','traitzhire-project-production.up.railway.app',]
 EMAIL_HOST_USER     = config('EMAIL_HOST_USER',     default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
