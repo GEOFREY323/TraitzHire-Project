@@ -1,10 +1,50 @@
-{% extends 'base.html'%}
-{% block content %}
-<h2>Edit Company Profile</h2>
+{% extends "base.html" %}
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Update</button>
+{% block content %}
+
+<div class="container" style="max-width:700px;margin-top:40px;">
+
+<h1>Edit Company Profile</h1>
+
+<form method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+<div>
+<label>Company Name</label>
+{{ form.company_name }}
+</div>
+
+<div>
+<label>Description</label>
+{{ form.description }}
+</div>
+
+<div>
+<label>Location</label>
+{{ form.location }}
+</div>
+
+<div>
+<label>Company Logo</label>
+{{ form.avatar }}
+</div>
+
+<div>
+<label>Company Website</label>
+{{ form.website_url }}
+</div>
+
+<button type="submit" class="btn btn-primary">
+Save Changes
+</button>
+
+<a href="{% url 'employer_dashboard' %}" class="btn btn-secondary">
+    Cancel
+</a>
+
 </form>
+
+</div>
+
 {% endblock %}

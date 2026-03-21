@@ -8,62 +8,70 @@
 
 <form method="POST" enctype="multipart/form-data">
 
-{% csrf_token %}
+    {% csrf_token %}
 
-<div>
-<label>Full Name</label>
-{{ form.full_name }}
-</div>
+    <div>
+        <label>Full Name</label>
+        {{ form.full_name }}
+    </div>
 
-<div>
-<label>Bio</label>
-{{ form.bio }}
-</div>
+    <div>
+        <label>Bio</label>
+        {{ form.bio }}
+    </div>
 
-<div>
-<label>Location</label>
-{{ form.location }}
-</div>
+    <div>
+        <label>Location</label>
+        {{ form.location }}
+    </div>
 
-<div>
-<label>Profile Picture</label>
-{{ form.avatar }}
-</div>
+    <div>
+        <label>Profile Picture</label>
+        {{ form.avatar }}
+    </div>
 
-<div>
-<label>Upload CV</label>
-{{ form.cv }}
-</div>
+    <div>
+        <label>Upload CV</label>
+        {{ form.cv }}
+    </div>
 
-<div>
-<label>LinkedIn URL</label>
-{{ form.linkin_url }}
-</div>
+    <div>
+        <label>LinkedIn URL</label>
+        {{ form.linkin_url }}
+    </div>
 
-<div>
-<label>Portfolio URL</label>
-{{ form.portfolio_url }}
-</div>
+    <div>
+        <label>Portfolio URL</label>
+        {{ form.portfolio_url }}
+    </div>
 
-<div>
-<label>Skills</label>
-<input type="text" name="skills_input" placeholder="Python, Django, React, HTML, CSS, JavaScript, Tailwind CSS, PHP">
-</div>
+    <!-- Existing Skills as checkboxes -->
+    <div>
+        <label>Skills</label>
+        {{ form.skills }}
+    </div>
 
-<div>
-<label>Open To Work</label>
-{{ form.is_open_to_work }}
-</div>
+    <!-- Add new skills manually -->
+    <div style="margin-top:10px;">
+        <label>Add New Skills (comma separated)</label>
+        <input type="text" name="new_skills" placeholder="e.g. Python, Django, React" 
+               style="width:100%; padding:8px; border-radius:5px; border:1px solid #ccc;">
+    </div>
 
-<br>
+    <div style="margin-top:10px;">
+        <label>Open To Work</label>
+        {{ form.is_open_to_work }}
+    </div>
 
-<button type="submit" class="btn btn-primary">
-Save Changes
-</button>
+    <br>
 
-<a href="{% url 'seeker_dashboard' %}" class="btn btn-secondary">
-Cancel
-</a>
+    <button type="submit" class="btn btn-primary">
+        Save Changes
+    </button>
+
+    <a href="{% url 'seeker_dashboard' %}" class="btn btn-secondary">
+        Cancel
+    </a>
 
 </form>
 

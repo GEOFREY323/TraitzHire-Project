@@ -154,3 +154,127 @@ cursor: pointer; }
 }
 
 
+/*MOBILE NAVBAR*/
+@media (max-width: 768px) {
+  .navbar-inner {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem;
+    gap: 10px;
+  }
+
+  .navbar-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+  }
+
+  .navbar-links a {
+    font-size: 0.9rem;
+  }
+}
+
+/*PROFILE SECTION*/
+@media (max-width: 768px) {
+  .card img {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  .card div[style*="display:flex"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+}
+
+/*DASHBOARD LAYOUT*/
+@media (max-width: 768px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/*JOB LIST / CARDS*/
+@media (max-width: 768px) {
+  .card {
+    padding: 1rem;
+  }
+
+  .card h4 {
+    font-size: 1rem;
+  }
+}
+
+/*FORMS (CREATE / EDIT JOB)*/
+@media (max-width: 768px) {
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  form input,
+  form textarea,
+  form select {
+    width: 100%;
+  }
+}
+
+/*BUTTONS*/
+@media (max-width: 768px) {
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-sm {
+    width: auto;
+  }
+}
+
+/*JOB FILTER (SEARCH) */
+@media (max-width: 768px) {
+  form[method="GET"] {
+    flex-direction: column !important;
+  }
+
+  form[method="GET"] input,
+  form[method="GET"] select,
+  form[method="GET"] button {
+    width: 100%;
+  }
+}
+
+/*EMPLOYER JOB ACTION BUTTONS*/
+@media (max-width: 768px) {
+  li[style*="display:flex"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px;
+  }
+
+  li[style*="display:flex"] > div:last-child {
+    flex-wrap: wrap;
+  }
+}
+
+/*SMALL PHONES (≤480px)*/
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+
+  .page-wrapper {
+    padding: 0 1rem;
+  }
+}
+

@@ -1,6 +1,14 @@
 from django.db import models
 
 # Create your models here.
+class Skill(models.Model):
+    name = models.CharField(unique=True, max_length=100)
+    slug = models.SlugField(unique=True, max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
 class JobSeekerProfile(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     full_name = models.CharField(max_length=100)
@@ -14,7 +22,7 @@ class JobSeekerProfile(models.Model):
     cv = models.FileField(upload_to='cvs/', blank=True, null=True)
     linkin_url = models.URLField(blank=True, null=True)
     portfolio_url = models.URLField(blank=True, null=True)
-    skills = models.ManyToManyField('Skill')
+    skills = models.ManyToManyField(Skill)
     is_open_to_work = models.BooleanField(default=True)
     joined_at = models.DateTimeField(auto_now_add=True)
 
@@ -27,20 +35,17 @@ class EmployerProfile(models.Model):
     company_name = models.CharField(max_length=100)
     description = models.TextField()
     website_url = models.URLField(blank=True, null=True)
-    logo = models.ImageField(upload_to='company_logos/', blank=True, null=True, default='company_logos/default_avatar.png')
+    avatar = models.ImageField(upload_to='company_logos/', blank=True, null=True)
+    def get_avatar_url(self):
+        if self.avatar:
+            return self.avatar.url
+        return '/static/images/default_avatar.png'
     location = models.CharField(max_length=100)
     company_size = models.CharField(max_length=100, blank=True, null=True)
     is_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.company_name
-
-class Skill(models.Model):
-    name = models.CharField(unique=True, max_length=100)
-    slug = models.SlugField(unique=True, max_length=100)
-
-    def __str__(self):
-        return self.name
 
 class JobCategory(models.Model):
     name = models.CharField(unique=True, max_length=100)

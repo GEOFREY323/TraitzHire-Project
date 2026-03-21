@@ -1,55 +1,74 @@
-{% extends "base.html "%}
+{% extends "base.html" %}
 
 {% block content %}
-{%  load static %}
+{% load static %}
+
 <h2>Employer Dashboard</h2>
-<div class="card" style="padding:20px; margin-bottom:20px;">
 
-    <div style="display:flex; align-items:center; gap:20px;">
+<!-- PROFILE CARD -->
+<div class="card" style="padding:20px; margin-bottom:20px; border-radius:10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+  <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
 
-        <!-- LOGO / AVATAR -->
-        {% if employer.logo %}
-            <img src="{{ employer.logo.url }}" 
-                 style="width:80px; height:80px; border-radius:50%; object-fit:cover;">
-        {% else %}
-            <img src="/static/images/default-avatar.png" 
-                 style="width:80px; height:80px; border-radius:50%; object-fit:cover;">
-        {% endif %}
+    <!-- LOGO / AVATAR -->
+    {% if employer.avatar %}
+      <img src="{{ employer.avatar.url }}" 
+           style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:2px solid #007bff;">
+    {% else %}
+      <img src="/static/images/default-avatar.png" 
+           style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:2px solid #ccc;">
+    {% endif %}
 
-        <!-- COMPANY INFO -->
-        <div>
-            <h2>{{ employer.company_name }}</h2>
-            <p>{{ employer.location }}</p>
-
-            {% if employer.website %}
-                <a href="{{ employer.website }}" target="_blank">
-                    {{ employer.website }}
-                </a>
-            {% endif %}
-        </div>
-
+    <!-- COMPANY INFO -->
+    <div style="flex:1; min-width:200px;">
+      <h2 style="margin:0;">{{ employer.company_name }}</h2>
+      <p style="margin:5px 0; color:#555;">{{ employer.location }}</p>
+      {% if employer.website_url %}
+        <p><a href="{{ employer.website_url }}" target="_blank" style="color:#007bff;">
+          {{ employer.website_url }}
+        </a></p>
+      {% endif %}
+      <p style="margin-top:5px; color:#333;">{{ employer.description }}</p>
     </div>
 
-    <!-- EDIT BUTTON -->
-    <div style="margin-top:15px;">
-        <a href="{% url 'edit_employer_profile' %}" class="btn btn-primary">
-            Edit Profile
-        </a>
-    </div>
+  </div>
 
+  <div style="margin-top:15px;">
+    <a href="{% url 'edit_employer_profile' %}" class="btn btn-primary">
+      Edit Profile
+    </a>
+  </div>
 </div>
+
+<!-- POSTED JOBS SECTION -->
 <h3>Your Posted Jobs</h3>
-<ul>
-    {% for job in jobs %}
-        <li>
-            <strong>{{app.job.title}}</strong>
-            - {{job.title}}
-            -Applicants: {{job.application_set.count}}
-            <a href="{% url 'manage_applicants' job.id %}"> <main>Manage Applicants</main></a>
-        </li>
-    {% empty %}
-        <li>No Jobs Posted Yet</li>
-    {% endfor %}
+<ul style="list-style:none; padding-left:0;">
+  {% for job in jobs %}
+    <li style="margin-bottom:10px; padding:10px; border:1px solid #eee; border-radius:5px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+      
+      <div>
+        <strong>{{ job.title }}</strong> - Applicants: {{ job.application_set.count }}
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:5px;">
+        <a href="{% url 'manage_applicants' job.id %}" style="color:#007bff;">
+          Manage Applicants
+        </a>
+        <a href="{% url 'edit_job' job.id %}" class="btn btn-sm btn-secondary">
+          Edit Job
+        </a>
+        <a href="{% url 'delete_job' job.id %}" class="btn btn-sm btn-danger">
+          Delete Job
+        </a>
+      </div>
+
+    </li>
+  {% empty %}
+    <li>No Jobs Posted Yet</li>
+  {% endfor %}
 </ul>
-<a href="{% url 'create_job' %}">Post New Job</a>
+
+<a href="{% url 'create_job' %}" class="btn btn-success" style="margin-top:15px; display:inline-block;">
+  Post New Job
+</a>
+
 {% endblock %}

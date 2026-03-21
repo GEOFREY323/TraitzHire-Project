@@ -29,6 +29,7 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, "jobs/register.html", {"form": form})
+
 @seeker_required
 @login_required
 def job_list(request):
@@ -95,8 +96,8 @@ def apply(request, pk):
         "job": job
     })
 
-@seeker_required
 @login_required
+@seeker_required
 def seeker_dashboard(request):
     jobseeker, created = JobSeekerProfile.objects.get_or_create(
         user=request.user
@@ -129,23 +130,9 @@ def seeker_dashboard(request):
         "applications": applications,
         "jobs": jobs,
         "categories": categories,
+        "profile": jobseeker,   # ✅ THIS IS THE FIX
     }
     return render(request, "jobs/seeker_dashboard.html", context)
-
-@login_required
-@employer_required
-def employer_dashboard(request):
-    employer = request.user.employerprofile
-    jobs = Job.objects.filter(employer=employer).prefetch_related(
-    'applications__applicant'
-)
-    applications = Application.objects.filter(
-        job__employer=employer
-    ).select_related('applicant__jobseekerprofile', 'job')
-    return render(request, 'jobs/employer_dashboard.html', {
-        'jobs': jobs,
-        'applications': applications,
-    })
 
 @login_required
 @seeker_required
@@ -154,11 +141,37 @@ def edit_seeker_profile(request):
     if request.method == 'POST':
         form = JobSeekerProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
+            # Delete old avatar if a new one is uploaded
             if 'avatar' in request.FILES and profile.avatar:
-                old_path = profile.avatar.path  # Full path on disk
+                old_path = profile.avatar.path
                 if os.path.isfile(old_path):
                     os.remove(old_path)
-            form.save()
+            # Save profile without committing M2M yet
+            profile = form.save(commit=False)
+            profile.save()
+            # Save checkbox-selected skills
+            form.save_m2m()
+            # Handle new typed skills (FIXED COMPLETELY)
+            new_skills_input = request.POST.get("new_skills", "")
+            if new_skills_input:
+                from django.utils.text import slugify
+                from .models import Skill
+                new_skills_list = [
+                    s.strip() for s in new_skills_input.split(",") if s.strip()
+                ]
+                for skill_name in new_skills_list:
+                    # Check existing skill (case-insensitive)
+                    skill_obj = Skill.objects.filter(
+                        name__iexact=skill_name
+                    ).first()
+                    # Create only if it doesn't exist
+                    if not skill_obj:
+                        skill_obj = Skill.objects.create(
+                            name=skill_name,
+                            slug=slugify(skill_name)
+                        )
+                    #  Add to profile
+                    profile.skills.add(skill_obj)
             messages.success(request, 'Profile updated!')
             return redirect('seeker_dashboard')
     else:
@@ -167,16 +180,36 @@ def edit_seeker_profile(request):
 
 @login_required
 @employer_required
+def employer_dashboard(request):
+    employer = request.user.employerprofile
+    jobs = Job.objects.filter(employer=employer).prefetch_related(
+        'applications__applicant'
+    )
+    applications = Application.objects.filter(
+        job__employer=employer
+    ).select_related('applicant__jobseekerprofile', 'job')
+    return render(request, 'jobs/employer_dashboard.html', {
+        'employer': employer,
+        'jobs': jobs,
+        'applications': applications,
+    })
+
+@login_required
+@employer_required
 def edit_employer_profile(request):
     profile = get_object_or_404(EmployerProfile, user=request.user)
     if request.method == 'POST':
         form = EmployerProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
+            # Delete old avatar if replaced
             if 'avatar' in request.FILES and profile.avatar:
-                old_path = profile.avatar.path  # Full path on disk
+                old_path = profile.avatar.path
                 if os.path.isfile(old_path):
                     os.remove(old_path)
-            form.save()
+            profile = form.save(commit=False)
+            profile.save()
+            # Ensure any file fields or related fields are applied
+            form.save_m2m()
             messages.success(request, 'Profile updated!')
             return redirect('employer_dashboard')
     else:
@@ -225,28 +258,88 @@ def create_job(request):
             job = form.save(commit=False)
             job.employer = request.user.employerprofile
             job.save()
+
+            # ✅ Save selected checkbox skills
             form.save_m2m()
+
+            # ✅ ADD THIS BLOCK (custom skills)
+            new_skills_input = request.POST.get("new_skills", "")
+
+            if new_skills_input:
+                from django.utils.text import slugify
+                from .models import Skill
+
+                new_skills_list = [
+                    s.strip() for s in new_skills_input.split(",") if s.strip()
+                ]
+
+                for skill_name in new_skills_list:
+                    # Check if skill exists (case-insensitive)
+                    skill_obj = Skill.objects.filter(
+                        name__iexact=skill_name
+                    ).first()
+
+                    # Create if not exists
+                    if not skill_obj:
+                        skill_obj = Skill.objects.create(
+                            name=skill_name,
+                            slug=slugify(skill_name)
+                        )
+
+                    # Add to job
+                    job.skills_required.add(skill_obj)
+
             messages.success(request, 'Job created!')
             return redirect('employer_dashboard')
     else:
         form = JobForm()
+
     return render(request, 'jobs/create_job.html', {'form': form})
 
 @login_required
 @employer_required
 def edit_job(request, pk):
     job = get_object_or_404(
-    Job,
-    pk=pk,
-    employer=request.user.employerprofile)
+        Job,
+        pk=pk,
+        employer=request.user.employerprofile
+    )
+
     if request.method == 'POST':
-        form = JobForm(request.POST, instance=job)
+        form = JobForm(request.POST, request.FILES, instance=job)
+
         if form.is_valid():
-            form.save()
+            job = form.save()  
+
+            new_skills_input = request.POST.get("new_skills", "")
+
+            if new_skills_input:
+                from django.utils.text import slugify
+                from .models import Skill
+
+                new_skills_list = [
+                    s.strip() for s in new_skills_input.split(",") if s.strip()
+                ]
+
+                for skill_name in new_skills_list:
+                    skill_obj = Skill.objects.filter(
+                        name__iexact=skill_name
+                    ).first()
+
+                    if not skill_obj:
+                        skill_obj = Skill.objects.create(
+                            name=skill_name,
+                            slug=slugify(skill_name)
+                        )
+
+                    job.skills_required.add(skill_obj)
+
             messages.success(request, 'Job updated!')
             return redirect('employer_dashboard')
+
     else:
         form = JobForm(instance=job)
+
     return render(request, 'jobs/edit_job.html', {'form': form, 'job': job})
 
 @login_required

@@ -23,6 +23,9 @@ Withdraw Application
 {% empty %}
 
 <p>You have not applied for any jobs yet.</p>
+<a href="{% url 'seeker_dashboard' %}" class="btn btn-secondary">
+Cancel
+</a>
 
 {% endfor %}
 

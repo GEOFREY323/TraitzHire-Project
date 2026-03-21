@@ -6,10 +6,70 @@
 
 <h1>Job Seeker Dashboard</h1>
 
+<!-- PROFILE  -->
+<div class="card" style="margin-top:1rem;">
+
+<h3>My Profile</h3>
+
+<div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+
+<img src="{{ profile.get_avatar_url }}" alt="Profile Picture"
+width="100" height="100" style="border-radius:50%; object-fit:cover;">
+
+<div>
+<h4>{{ profile.full_name }}</h4>
+
+<p>{{ profile.bio }}</p>
+
+<p> {{ profile.location }}</p>
+
+<p>
+<strong>Status:</strong>
+{% if profile.is_open_to_work %}
+<span style="color:green;">Open to Work</span>
+{% else %}
+<span style="color:red;">Not Available</span>
+{% endif %}
+</p>
+
+{% if profile.linkin_url %}
+<p><a href="{{ profile.linkin_url }}" target="_blank">LinkedIn</a></p>
+{% endif %}
+
+{% if profile.portfolio_url %}
+<p><a href="{{ profile.portfolio_url }}" target="_blank">Portfolio</a></p>
+{% endif %}
+
+</div>
+
+</div>
+
+<!-- Skills -->
+<div style="margin-top:15px;">
+<strong>Skills:</strong>
+<ul style="display:flex; gap:10px; flex-wrap:wrap; list-style:none; padding:0;">
+
+{% for skill in profile.skills.all %}
+<li style="background:#eee; padding:5px 10px; border-radius:5px;">
+{{ skill.name }}
+</li>
+{% empty %}
+<li>No skills added</li>
+{% endfor %}
+
+</ul>
+</div>
+
+<a href="{% url 'edit_seeker_profile' %}" class="btn btn-primary" style="margin-top:10px;">
+Edit Profile
+</a>
+
+</div>
+
+<!-- ✅ DASHBOARD LAYOUT STARTS HERE -->
 <div class="dashboard-layout">
 
 <!-- Sidebar -->
-
 <div class="card">
 
 <h3>Navigation</h3>
@@ -33,7 +93,6 @@
 </div>
 
 <!-- Main Content -->
-
 <div>
 
 <div class="card card-accent">
@@ -43,9 +102,11 @@
 
 <div class="card card-accent-yellow" style="margin-top:1rem;">
 <h3>Recent Jobs</h3>
+
 <div class="card" style="margin-top:1.5rem;">
 
 <h3>Find Jobs</h3>
+
 <form method="GET" style="margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap;">
 
 <input type="text" name="keyword" placeholder="Keyword"

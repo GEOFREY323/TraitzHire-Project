@@ -41,14 +41,14 @@ class JobSeekerProfileForm(forms.ModelForm):
     def clean_avatar(self):
         avatar = self.cleaned_data.get('avatar')
         if avatar:
-            # 1. Check file size (limit to 2MB)
+            # Check file size (limit to 2MB)
             max_size = 2 * 1024 * 1024  # 2MB in bytes
             if avatar.size > max_size:
                 raise ValidationError(
                     f'Image file too large. Maximum size is 2MB. '
                     f'Your file is {avatar.size // 1024 // 1024:.1f}MB.'
                 )
-            # 2. Check file extension
+            # Check file extension
             allowed_extensions = ['.jpg', '.jpeg', '.png', '.webp']
             ext = os.path.splitext(avatar.name)[1].lower()
             if ext not in allowed_extensions:
@@ -72,8 +72,27 @@ class EmployerProfileForm(forms.ModelForm):
             'website_url',
             'location',
             'company_size',
-            'logo'
+            'avatar'
         ]
+    def clean_avatar(self):
+        avatar = self.cleaned_data.get('avatar')
+        if avatar:
+            # Check file size (limit to 2MB)
+            max_size = 2 * 1024 * 1024  # 2MB in bytes
+            if avatar.size > max_size:
+                raise ValidationError(
+                    f'Image file too large. Maximum size is 2MB. '
+                    f'Your file is {avatar.size // 1024 // 1024:.1f}MB.'
+                )
+            # Check file extension
+            allowed_extensions = ['.jpg', '.jpeg', '.png', '.webp']
+            ext = os.path.splitext(avatar.name)[1].lower()
+            if ext not in allowed_extensions:
+                raise ValidationError(
+                    f'Unsupported file type: {ext}. '
+                    f'Allowed types: {', '.join(allowed_extensions)}'
+                )
+        return avatar
 
 class ApplicationForm(forms.ModelForm):
     class Meta:
