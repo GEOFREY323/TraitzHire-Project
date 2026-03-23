@@ -27,7 +27,6 @@ urlpatterns = [
     path("application/<int:pk>/status/", views.update_status, name="update_status"),
     path('recommended-jobs/', views.recommended_jobs, name='recommended_jobs'),
     path('notifications/',views.notifications,name='notifications'),
-    path("choose-role/", views.choose_role, name="choose_role"),
     path("redirect/", views.redirect_after_login, name="redirect_after_login"),
     path("my-applications/", views.my_applications, name="my_applications"),
 ]

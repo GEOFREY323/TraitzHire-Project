@@ -24,15 +24,19 @@ def register(request):
         role = request.POST.get("role")
         if form.is_valid() and role in ["seeker", "employer"]:
             user = form.save()
-            # ✅ CREATE PROFILE IMMEDIATELY
+
             if role == "seeker":
-                JobSeekerProfile.objects.get_or_create(user=user)
-            elif role == "employer":
-                EmployerProfile.objects.get_or_create(user=user)
-            login(request, user)
+                JobSeekerProfile.objects.get_or_create(
+                    user=user
+                )
+                return redirect("edit_seeker_profile")
+            if role == "employer":
+                EmployerProfile.objects.get_or_create(
+                    user=user
+                )
+                return redirect("edit_employer_profile")
             send_welcome_email(user)
             messages.success(request, "Welcome to TraitzHire!")
-            return redirect("choose_role")
         else:
             messages.error(request, 'Please fix the errors below.')
     else:
@@ -499,20 +503,20 @@ def logout_view(request):
     logout(request)
     return redirect("home")
 
-@login_required
-def choose_role(request):
-    if request.method == "POST":
-        role = request.POST.get("role")
-        if role == "seeker":
-            JobSeekerProfile.objects.get_or_create(
-                user=request.user
-            )
-            return redirect("edit_seeker_profile")
-        if role == "employer":
-            EmployerProfile.objects.get_or_create(
-                user=request.user
-            )
-            return redirect("edit_employer_profile")
+# @login_required
+# def choose_role(request):
+#     if request.method == "POST":
+#         role = request.POST.get("role")
+#         if role == "seeker":
+#             JobSeekerProfile.objects.get_or_create(
+#                 user=request.user
+#             )
+#             return redirect("edit_seeker_profile")
+#         if role == "employer":
+#             EmployerProfile.objects.get_or_create(
+#                 user=request.user
+#             )
+#             return redirect("edit_employer_profile")
     return render(request, "jobs/choose_role.html")
 
 @login_required
@@ -522,7 +526,7 @@ def redirect_after_login(request):
         return redirect("seeker_dashboard")
     if hasattr(user, "employerprofile"):
         return redirect("employer_dashboard")
-    return redirect("choose_role")
+    return redirect("login")
 
 @login_required
 @seeker_required
