@@ -16,16 +16,25 @@ from .models import Job, JobCategory, EmployerProfile, JobSeekerProfile, Applica
 from .forms import ApplicationForm, JobSeekerProfileForm, EmployerProfileForm, JobForm, RegisterForm
 from .utils import send_application_received_email, send_new_applicant_email, send_welcome_email
 
+from .models import JobSeekerProfile, EmployerProfile
+
 def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         role = request.POST.get("role")
         if form.is_valid() and role in ["seeker", "employer"]:
             user = form.save()
+            # ✅ CREATE PROFILE IMMEDIATELY
+            if role == "seeker":
+                JobSeekerProfile.objects.get_or_create(user=user)
+            elif role == "employer":
+                EmployerProfile.objects.get_or_create(user=user)
             login(request, user)
             send_welcome_email(user)
             messages.success(request, "Welcome to TraitzHire!")
             return redirect("choose_role")
+        else:
+            messages.error(request, 'Please fix the errors below.')
     else:
         form = RegisterForm()
     return render(request, "jobs/register.html", {"form": form})

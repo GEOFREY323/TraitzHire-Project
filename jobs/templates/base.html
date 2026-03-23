@@ -38,12 +38,12 @@
             </button>
         </form>
 
-        {% if user.jobseekerprofile %}
+        {% if user.is_authenticated and user.jobseekerprofile %}
           <a href="{% url 'seeker_dashboard' %}">My Dashboard</a>
           <a href="{% url 'recommended_jobs' %}">Recommended Jobs</a>
           <a href="{% url 'notifications' %}">Notifications</a>
 
-        {% elif user.employerprofile %}
+        {% elif user.is_authenticated and user.employerprofile %}
           <a href="{% url 'employer_dashboard' %}">Dashboard</a>
           <a href="{% url 'create_job' %}">Post a Job</a>
           <a href="{% url 'edit_employer_profile' %}">Edit Profile</a>
