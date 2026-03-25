@@ -18,6 +18,11 @@ from .utils import send_application_received_email, send_new_applicant_email, se
 
 from .models import JobSeekerProfile, EmployerProfile
 
+from django.contrib.auth import login
+
+import threading
+from django.contrib.auth import login
+
 def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -26,14 +31,18 @@ def register(request):
             user = form.save()
             if role == "seeker":
                 JobSeekerProfile.objects.get_or_create(user=user)
-            elif role == "employer":
-                EmployerProfile.objects.get_or_create(user=user)
-            send_welcome_email(user)
-            messages.success(request, "Welcome to TraitzHire!")
-            if role == "seeker":
-                return redirect("edit_seeker_profile")
+                redirect_url = "edit_seeker_profile"
             else:
-                return redirect("edit_employer_profile")
+                EmployerProfile.objects.get_or_create(user=user)
+                redirect_url = "edit_employer_profile"
+            login(request, user)
+            # ✅ SEND EMAIL IN BACKGROUND (no timeout)
+            threading.Thread(
+                target=send_welcome_email,
+                args=(user,)
+            ).start()
+            messages.success(request, "Welcome to TraitzHire!")
+            return redirect(redirect_url)
         else:
             messages.error(request, 'Please fix the errors below.')
     else:
