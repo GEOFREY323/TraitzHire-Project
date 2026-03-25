@@ -24,19 +24,16 @@ def register(request):
         role = request.POST.get("role")
         if form.is_valid() and role in ["seeker", "employer"]:
             user = form.save()
-
             if role == "seeker":
-                JobSeekerProfile.objects.get_or_create(
-                    user=user
-                )
-                return redirect("edit_seeker_profile")
-            if role == "employer":
-                EmployerProfile.objects.get_or_create(
-                    user=user
-                )
-                return redirect("edit_employer_profile")
+                JobSeekerProfile.objects.get_or_create(user=user)
+            elif role == "employer":
+                EmployerProfile.objects.get_or_create(user=user)
             send_welcome_email(user)
             messages.success(request, "Welcome to TraitzHire!")
+            if role == "seeker":
+                return redirect("edit_seeker_profile")
+            else:
+                return redirect("edit_employer_profile")
         else:
             messages.error(request, 'Please fix the errors below.')
     else:
@@ -503,21 +500,6 @@ def logout_view(request):
     logout(request)
     return redirect("home")
 
-# @login_required
-# def choose_role(request):
-#     if request.method == "POST":
-#         role = request.POST.get("role")
-#         if role == "seeker":
-#             JobSeekerProfile.objects.get_or_create(
-#                 user=request.user
-#             )
-#             return redirect("edit_seeker_profile")
-#         if role == "employer":
-#             EmployerProfile.objects.get_or_create(
-#                 user=request.user
-#             )
-#             return redirect("edit_employer_profile")
-    return render(request, "jobs/choose_role.html")
 
 @login_required
 def redirect_after_login(request):
