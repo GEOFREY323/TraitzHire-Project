@@ -90,15 +90,14 @@ def apply(request, pk):
             application.applicant = jobseeker
             application.job = job
             application.save()
-            from .utils import create_notification
             # notify employer
-            create_notification(
+            send_new_applicant_email(
                 user=job.employer.user,
                 message=f"{request.user.username} applied for your job '{job.title}'",
                 link=f"/applicant/{application.id}/"
             )
             # notify applicant
-            create_notification(
+            send_new_applicant_email(
                 user=request.user,
                 message=f"You successfully applied for '{job.title}'",
                 link=f"/jobs/{job.id}/"
