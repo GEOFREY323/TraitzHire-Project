@@ -3,31 +3,28 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.mail import send_mail
 
-
 def send_welcome_email(user):
-
-    subject = f"Welcome to TraitzHire, {user.username}!"
-
-    text_content = render_to_string(
-        "emails/welcome.txt",
-        {"user": user}
-    )
-
-    html_content = render_to_string(
-        "emails/welcome.html",
-        {"user": user}
-    )
-
-    email = EmailMultiAlternatives(
-        subject,
-        text_content,
-        settings.DEFAULT_FROM_EMAIL,
-        [user.email]
-    )
-
-    email.attach_alternative(html_content, "text/html")
-
-    email.send()
+    try:
+        subject = f"Welcome to TraitzHire, {user.username}!"
+        text_content = render_to_string(
+            "emails/welcome.txt",
+            {"user": user}
+        )
+        html_content = render_to_string(
+            "emails/welcome.html",
+            {"user": user}
+        )
+        email = EmailMultiAlternatives(
+            subject,
+            text_content,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email]
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send(fail_silently=False)
+        print("✅ Email sent successfully")
+    except Exception as e:
+        print("❌ Email failed:", e)
 
 
 def send_application_received_email(user, job):
