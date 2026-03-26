@@ -42,11 +42,8 @@ def register(request):
             # Log user in
             login(request, user)
 
-            # Send welcome email safely
-            try:
-                send_welcome_email(user)
-            except Exception as e:
-                print("Email error:", e)
+            # Send welcome email asynchronously (non-blocking)
+            send_welcome_email(user)
 
             messages.success(request, "Welcome to TraitzHire!")
             return redirect(redirect_url)
