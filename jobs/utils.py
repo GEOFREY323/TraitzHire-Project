@@ -5,42 +5,41 @@ from django.conf import settings
 from django.core.mail import send_mail
 
 def send_welcome_email(user):
-    thread = threading.Thread(target=_send_welcome_email_async, args=(user,))
-    thread.daemon = True
-    thread.start()
-
-def _send_welcome_email_async(user):
-    subject = f"Welcome to TraitzHire, {user.username}!"
-
     try:
         print("📨 Sending email to:", user.email)
 
-        text_content = render_to_string(
-            "emails/welcome.txt",
-            {"user": user}
-        )
+        from django.core.mail import get_connection
+        connection = get_connection()
+        connection.open()
+        print("✅ SMTP connection opened")
 
-        html_content = render_to_string(
-            "emails/welcome.html",
-            {"user": user}
-        )
+        subject = f"Welcome to TraitzHire, {user.username}!"
+
+        from django.template.loader import render_to_string
+        text_content = render_to_string("emails/welcome.txt", {"user": user})
+        html_content = render_to_string("emails/welcome.html", {"user": user})
+
+        from django.core.mail import EmailMultiAlternatives
+        from django.conf import settings
 
         email = EmailMultiAlternatives(
             subject,
             text_content,
-            settings.DEFAULT_FROM_EMAIL,
+            settings.EMAIL_HOST_USER,  # 👈 IMPORTANT
             [user.email]
         )
 
         email.attach_alternative(html_content, "text/html")
-        email.send()
 
-        print("✅ Welcome email sent")
+        result = email.send(fail_silently=False)
+
+        print("📊 Send result:", result)
+
+        connection.close()
+        print("✅ SMTP connection closed")
 
     except Exception as e:
-        import traceback
         print("❌ Email failed:", str(e))
-        traceback.print_exc()
 
 
 def send_application_received_email(user, job):
