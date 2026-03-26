@@ -1,4 +1,3 @@
-import threading
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -33,9 +32,7 @@ def send_welcome_email(user):
         print("✅ Welcome email sent")
 
     except Exception as e:
-        import traceback
         print("❌ Email failed:", str(e))
-        traceback.print_exc()
 
 
 def send_application_received_email(user, job):
