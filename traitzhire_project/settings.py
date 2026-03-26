@@ -33,7 +33,7 @@ CSRF_TRUSTED_ORIGINS = [
 EMAIL_HOST_USER     = config('EMAIL_HOST_USER',     default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-DEFAULT_FROM_EMAIL = 'TraitzHire <your_email@gmail.com>'
+DEFAULT_FROM_EMAIL = config('EMAIL_HOST_USER')
 DATABASE_URL = config('DATABASE_URL', default='')
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),

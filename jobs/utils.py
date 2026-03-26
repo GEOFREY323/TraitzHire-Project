@@ -38,7 +38,9 @@ def _send_welcome_email_async(user):
         print("✅ Welcome email sent")
 
     except Exception as e:
+        import traceback
         print("❌ Email failed:", str(e))
+        traceback.print_exc()
 
 
 def send_application_received_email(user, job):
