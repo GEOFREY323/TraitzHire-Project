@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.mail import send_mail
 
-def _send_welcome_email_async(user):
+def send_welcome_email(user):
     subject = f"Welcome to TraitzHire, {user.username}!"
 
     try:
