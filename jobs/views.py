@@ -27,26 +27,35 @@ def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         role = request.POST.get("role")
+
         if form.is_valid() and role in ["seeker", "employer"]:
             user = form.save()
+
+            # Create profile
             if role == "seeker":
                 JobSeekerProfile.objects.get_or_create(user=user)
                 redirect_url = "edit_seeker_profile"
             else:
                 EmployerProfile.objects.get_or_create(user=user)
                 redirect_url = "edit_employer_profile"
+
+            # Log user in
             login(request, user)
-            # ✅ SEND EMAIL IN BACKGROUND (no timeout)
-            threading.Thread(
-                target=send_welcome_email,
-                args=(user,)
-            ).start()
+
+            # Send welcome email safely
+            try:
+                send_welcome_email(user)
+            except Exception as e:
+                print("Email error:", e)
+
             messages.success(request, "Welcome to TraitzHire!")
             return redirect(redirect_url)
+
         else:
-            messages.error(request, 'Please fix the errors below.')
+            messages.error(request, "Please fix the errors below.")
     else:
         form = RegisterForm()
+
     return render(request, "jobs/register.html", {"form": form})
 
 @seeker_required
