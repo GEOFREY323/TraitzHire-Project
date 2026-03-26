@@ -1,9 +1,15 @@
+import threading
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.mail import send_mail
 
 def send_welcome_email(user):
+    thread = threading.Thread(target=_send_welcome_email_async, args=(user,))
+    thread.daemon = True
+    thread.start()
+
+def _send_welcome_email_async(user):
     subject = f"Welcome to TraitzHire, {user.username}!"
 
     try:
@@ -32,7 +38,9 @@ def send_welcome_email(user):
         print("✅ Welcome email sent")
 
     except Exception as e:
+        import traceback
         print("❌ Email failed:", str(e))
+        traceback.print_exc()
 
 
 def send_application_received_email(user, job):
