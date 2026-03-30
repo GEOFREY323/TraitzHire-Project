@@ -313,6 +313,19 @@ def create_job(request):
                     # Add to job
                     job.skills_required.add(skill_obj)
 
+            # Notify job seekers whose skills match the job's required skills
+            if job.skills_required.exists():
+                matching_seekers = JobSeekerProfile.objects.filter(
+                    skills__in=job.skills_required.all()
+                ).distinct()
+
+                for seeker in matching_seekers:
+                    Notification.objects.create(
+                        user=seeker.user,
+                        message=f"New job posted: {job.title} at {job.employer.company_name}",
+                        link=f"/jobs/{job.id}/"
+                    )
+
             messages.success(request, 'Job created!')
             return redirect('employer_dashboard')
     else:
@@ -463,14 +476,21 @@ def saved_jobs(request):
 def recommended_jobs(request):
     jobseeker = request.user.jobseekerprofile
     skills = jobseeker.skills.all()
-    jobs = Job.objects.filter(
-        is_active=True
-    ).annotate(
-        match_count=db_models.Count(
-            'skills_required',
-            filter=db_models.Q(skills_required__in=skills)
-        )
-    ).order_by('-match_count')
+
+    if not skills.exists():
+        # New user with no skills - show all active jobs
+        jobs = Job.objects.filter(is_active=True).order_by('-created_at')
+    else:
+        # User has skills - show jobs sorted by skill match count
+        jobs = Job.objects.filter(
+            is_active=True
+        ).annotate(
+            match_count=db_models.Count(
+                'skills_required',
+                filter=db_models.Q(skills_required__in=skills)
+            )
+        ).order_by('-match_count', '-created_at')
+
     return render(request, 'jobs/recommended_jobs.html', {
         'jobs': jobs
     })
