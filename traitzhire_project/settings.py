@@ -37,9 +37,7 @@ ANYMAIL = {
 }
 
 DEFAULT_FROM_EMAIL = "TraitzHire <geofreyankinimbomgam@gmail.com>"
-
-
-DEFAULT_FROM_EMAIL = config("EMAIL_HOST_USER")
+SERVER_EMAIL = config('SERVER_EMAIL'),
 DATABASE_URL = config('DATABASE_URL', default='')
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
