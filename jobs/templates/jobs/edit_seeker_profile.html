@@ -13,42 +13,98 @@
     <div>
         <label>Full Name</label>
         {{ form.full_name }}
+        {% if form.full_name.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.full_name.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
     <div>
         <label>Bio</label>
         {{ form.bio }}
+        {% if form.bio.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.bio.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
     <div>
         <label>Location</label>
         {{ form.location }}
+        {% if form.location.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.location.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
     <div>
         <label>Profile Picture</label>
         {{ form.avatar }}
+        {% if form.avatar.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.avatar.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
     <div>
         <label>Upload CV</label>
         {{ form.cv }}
+        {% if form.cv.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.cv.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
     <div>
         <label>LinkedIn URL</label>
         {{ form.linkin_url }}
+        {% if form.linkin_url.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.linkin_url.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
     <div>
         <label>Portfolio URL</label>
         {{ form.portfolio_url }}
+        {% if form.portfolio_url.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.portfolio_url.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
     <!-- Existing Skills as checkboxes -->
     <div>
         <label>Skills</label>
         {{ form.skills }}
+        {% if form.skills.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.skills.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
     <!-- Add new skills manually -->
@@ -61,6 +117,13 @@
     <div style="margin-top:10px;">
         <label>Open To Work</label>
         {{ form.is_open_to_work }}
+        {% if form.is_open_to_work.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.is_open_to_work.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 
     <br>
