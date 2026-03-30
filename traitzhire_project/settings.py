@@ -36,7 +36,7 @@ ANYMAIL = {
     "SENDGRID_API_KEY": config("SENDGRID_API_KEY"),
 }
 
-DEFAULT_FROM_EMAIL = "TraitzHire <your_verified_email@domain.com>"
+DEFAULT_FROM_EMAIL = "TraitzHire <geofreyankinimbomgam@gmail.com>"
 
 
 DEFAULT_FROM_EMAIL = config("EMAIL_HOST_USER")
