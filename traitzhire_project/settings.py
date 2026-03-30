@@ -14,7 +14,6 @@ from pathlib import Path
 from decouple import config, Csv
 import cloudinary
 import os
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -30,14 +29,15 @@ CSRF_TRUSTED_ORIGINS = [
     'https://traitzhire-project-production.up.railway.app',  # note the https://
     'http://127.0.0.1:8000',
 ]
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-EMAIL_HOST = "smtp.sendgrid.net"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
 
-EMAIL_HOST_USER = "apikey"   # IMPORTANT: literally "apikey"
-EMAIL_HOST_PASSWORD = config("SENDGRID_API_KEY")
+ANYMAIL = {
+    "SENDGRID_API_KEY": config("SENDGRID_API_KEY"),
+}
+
+DEFAULT_FROM_EMAIL = "TraitzHire <your_verified_email@domain.com>"
+
 
 DEFAULT_FROM_EMAIL = config("EMAIL_HOST_USER")
 DATABASE_URL = config('DATABASE_URL', default='')
@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cloudinary',
     'jobs',
+    'anymail',
 ]
 
 MIDDLEWARE = [
