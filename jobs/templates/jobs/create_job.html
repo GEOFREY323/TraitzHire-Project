@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width:800px; margin-top:40px;">
+
+<div class="card">
+
+<h1 style="margin-bottom:20px;">Post a New Job</h1>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div style="margin-bottom:15px;">
+<label>Job Title</label>
+{{ form.title }}
+</div>
+
+<div style="margin-bottom:15px;">
+<label>Description</label>
+{{ form.description }}
+</div>
+
+<div style="margin-bottom:15px;">
+<label>Requirements</label>
+{{ form.requirements }}
+</div>
+
+<div style="margin-bottom:15px;">
+<label>Category</label>
+{{ form.category }}
+</div>
+
+<div style="margin-bottom:15px;">
+<label>Skills Required</label>
+{{ form.skills_required }}
+</div>
+<div style="margin-bottom:15px;">
+<label>Add New Skills (comma separated)</label>
+<input type="text" name="new_skills" placeholder="Python, Django, React">
+</div>
+
+<div style="margin-bottom:15px;">
+<label>Job Type</label>
+{{ form.job_type }}
+</div>
+
+<div style="margin-bottom:15px;">
+<label>Location</label>
+{{ form.location }}
+</div>
+
+<div style="display:flex; gap:20px;">
+
+<div style="flex:1;">
+<label>Minimum Salary</label>
+{{ form.salary_min }}
+</div>
+
+<div style="flex:1;">
+<label>Maximum Salary</label>
+{{ form.salary_max }}
+</div>
+
+</div>
+
+<div style="margin-top:15px;">
+<label>Application Deadline</label>
+{{ form.deadline }}
+</div>
+
+<div style="margin-top:25px; display:flex; gap:10px;">
+
+<button type="submit" class="btn btn-primary">
+Post Job
+</button>
+
+<a href="{% url 'employer_dashboard' %}" class="btn btn-secondary">
+Cancel
+</a>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+{% endblock %}

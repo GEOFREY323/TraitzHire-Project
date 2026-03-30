@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width:700px;margin-top:40px;">
+
+<h1>Edit Profile</h1>
+
+<form method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    <div>
+        <label>Full Name</label>
+        {{ form.full_name }}
+        {% if form.full_name.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.full_name.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <label>Bio</label>
+        {{ form.bio }}
+        {% if form.bio.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.bio.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <label>Location</label>
+        {{ form.location }}
+        {% if form.location.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.location.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <label>Profile Picture</label>
+        {{ form.avatar }}
+        {% if form.avatar.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.avatar.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <label>Upload CV</label>
+        {{ form.cv }}
+        {% if form.cv.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.cv.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <label>LinkedIn URL</label>
+        {{ form.linkin_url }}
+        {% if form.linkin_url.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.linkin_url.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <label>Portfolio URL</label>
+        {{ form.portfolio_url }}
+        {% if form.portfolio_url.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.portfolio_url.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Existing Skills as checkboxes -->
+    <div>
+        <label>Skills</label>
+        {{ form.skills }}
+        {% if form.skills.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.skills.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Add new skills manually -->
+    <div style="margin-top:10px;">
+        <label>Add New Skills (comma separated)</label>
+        <input type="text" name="new_skills" placeholder="e.g. Python, Django, React" 
+               style="width:100%; padding:8px; border-radius:5px; border:1px solid #ccc;">
+    </div>
+
+    <div style="margin-top:10px;">
+        <label>Open To Work</label>
+        {{ form.is_open_to_work }}
+        {% if form.is_open_to_work.errors %}
+            <div style="color: red; margin-top: 5px;">
+                {% for error in form.is_open_to_work.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <br>
+
+    <button type="submit" class="btn btn-primary">
+        Save Changes
+    </button>
+
+    <a href="{% url 'seeker_dashboard' %}" class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>
+
+</div>
+
+{% endblock %}

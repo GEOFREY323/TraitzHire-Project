@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div style="margin-top:40px;">
+
+{% if user.is_authenticated %}
+
+    {% if already_applied %}
+        <button class="btn btn-success" disabled>
+            ✅ Already Applied
+        </button>
+    {% else %}
+        <form method="POST" action="{% url 'apply' job.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+                Apply for this Job
+            </button>
+        </form>
+    {% endif %}
+
+{% endif %}
+
+{% if is_saved %}
+    <a href="{% url 'save_job' job.pk %}">
+        Unsave Job
+    </a>
+{% else %}
+    <a href="{% url 'save_job' job.pk %}">
+        Save Job
+    </a>
+{% endif %}
+<div class="card">
+
+<h1>{{ job.title }}</h1>
+
+<p style="color:var(--slate-500);">
+
+<a href="{% url 'public_employer_profile' job.employer.pk %}">
+{{ job.employer.company_name }}
+</a>
+
+• {{ job.location }}
+
+</p>
+
+<span class="badge">
+{{ job.get_job_type_display }}
+</span>
+
+<hr style="margin:20px 0;">
+
+{% if job.category %}
+<p>
+📂 Category: {{ job.category.name }}
+</p>
+{% endif %}
+
+<h3>Job Description</h3>
+<p>{{ job.description }}</p>
+
+
+<h3 style="margin-top:20px;">Requirements</h3>
+<p>{{ job.requirements }}</p>
+
+
+<h3 style="margin-top:20px;">Skills Required</h3>
+
+<div class="tag-row">
+
+{% for skill in job.skills_required.all %}
+
+<span class="skill-tag">
+{{ skill.name }}
+</span>
+
+{% empty %}
+
+<p>No specific skills listed.</p>
+
+{% endfor %}
+
+</div>
+
+
+{% if job.salary_min and job.salary_max %}
+
+<p style="margin-top:20px;">
+💰 Salary: ${{ job.salary_min }} - ${{ job.salary_max }}
+</p>
+
+{% endif %}
+
+
+{% if job.deadline %}
+
+<p style="color:var(--red-600);">
+Deadline: {{ job.deadline }}
+</p>
+
+{% endif %}
+
+
+</div>
+
+</div>
+
+{% endblock %}

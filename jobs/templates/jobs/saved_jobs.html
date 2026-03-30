@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Saved Jobs</h2>
+
+{% for item in saved_jobs %}
+<div class='card'>
+<h3>{{ item.job.title }}</h3>
+<p>{{ item.job.location }}</p>
+
+<p><a href="{% url 'job_detail' item.job.pk %}">View Job</a></p>
+
+<p><a href="{% url 'save_job' item.job.pk %}" style="color:red;">Unsave</a></p>
+</div>
+
+{% empty %}
+<p>No saved jobs yet.</p>
+<a href="{% url 'seeker_dashboard' %}" class="btn btn-secondary">
+    Cancel
+</a>
+{% endfor %}
+{% endblock content %}

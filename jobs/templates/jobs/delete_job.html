@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width:600px;margin-top:60px;text-align:center;">
+
+<div class="card" style="padding:30px;">
+
+<h2 style="color:#d9534f;">Delete Job</h2>
+
+<p style="margin-top:20px;">
+Are you sure you want to delete the job:
+</p>
+
+<h3 style="margin:20px 0;">
+"{{ job.title }}"
+</h3>
+
+<p style="color:gray;">
+This action cannot be undone.
+</p>
+
+<form method="POST" style="margin-top:30px;">
+
+{% csrf_token %}
+
+<button type="submit" class="btn btn-danger" style="margin-right:10px;">
+Yes, Delete Job
+</button>
+
+<a href="{% url 'employer_dashboard' %}" class="btn btn-secondary">
+Cancel
+</a>
+
+</form>
+
+</div>
+
+</div>
+
+{% endblock %}

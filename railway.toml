@@ -1,0 +1,5 @@
+[build]
+builder = 'RAILPACK'
+[deploy]
+startCommand = 'python manage.py migrate && gunicorn traitzhire_project.wsgi --log-file -'
+restartPolicyType = 'ON_FAILURE'

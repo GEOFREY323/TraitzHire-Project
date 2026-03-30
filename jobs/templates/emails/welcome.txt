@@ -1,0 +1,29 @@
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.conf import settings
+
+
+def send_welcome_email(user):
+
+    subject = f"Welcome to TraitzHire, {user.username}!"
+
+    text_content = render_to_string(
+        "emails/welcome.txt",
+        {"user": user}
+    )
+
+    html_content = render_to_string(
+        "emails/welcome.html",
+        {"user": user}
+    )
+
+    email = EmailMultiAlternatives(
+        subject,
+        text_content,
+        settings.DEFAULT_FROM_EMAIL,
+        [user.email]
+    )
+
+    email.attach_alternative(html_content, "text/html")
+
+    email.send()

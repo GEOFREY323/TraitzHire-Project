@@ -1,0 +1,32 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path("register/", views.register, name="register"),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('', views.home, name='home'),
+    path("seeker/dashboard/", views.seeker_dashboard, name="seeker_dashboard"),
+    path("employer/dashboard/", views.employer_dashboard, name="employer_dashboard"),
+    path("jobseeker/profile/edit/", views.edit_seeker_profile, name="edit_seeker_profile"),
+    path("employer/profile/edit/", views.edit_employer_profile, name="edit_employer_profile"),
+    path("jobseeker/profile/<int:pk>/", views.public_jobseeker_profile, name="public_jobseeker_profile"),
+    path("jobseeker/dashboard/saved_jobs",views.saved_jobs, name="saved_jobs"),
+    path("employer/profile/<int:pk>/", views.public_employer_profile, name="public_employer_profile"),
+    path("jobs/", views.job_list, name="job_list"),
+    path("jobs/<int:pk>/", views.job_detail, name="job_detail"),
+    path("jobs/create/", views.create_job, name="create_job"),
+    path("jobs/<int:pk>/edit/", views.edit_job, name="edit_job"),
+    path("jobs/<int:pk>/delete/", views.delete_job, name="delete_job"),
+    path("jobs/<int:pk>/toggle/", views.toggle_job, name="toggle_job"),
+    path("jobs/<int:pk>/save/", views.save_job, name="save_job"),
+    path("jobs/<int:pk>/apply/", views.apply, name="apply"),
+    path("application/<int:pk>/withdraw/", views.withdraw_application, name="withdraw_application"),
+    path("jobs/<int:pk>/applicants/", views.manage_applicants, name="manage_applicants"),
+    path("application/<int:pk>/", views.applicant_detail, name="applicant_detail"),
+    path("application/<int:pk>/status/", views.update_status, name="update_status"),
+    path('recommended-jobs/', views.recommended_jobs, name='recommended_jobs'),
+    path('notifications/',views.notifications,name='notifications'),
+    path("redirect/", views.redirect_after_login, name="redirect_after_login"),
+    path("my-applications/", views.my_applications, name="my_applications"),
+]
