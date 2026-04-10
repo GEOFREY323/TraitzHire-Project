@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 #Reads SECRET_KEY from .env, raises error if missing
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost','traitzhire-project-production.up.railway.app',]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost','traitzhire-project.onrender.com',]
 CSRF_TRUSTED_ORIGINS = [
     'https://traitzhire-project-production.up.railway.app',  # note the https://
     'http://127.0.0.1:8000',
