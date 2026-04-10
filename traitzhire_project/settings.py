@@ -24,19 +24,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 #Reads SECRET_KEY from .env, raises error if missing
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
+
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost','traitzhire-project.onrender.com',]
 CSRF_TRUSTED_ORIGINS = [
     'https://traitzhire-project-production.up.railway.app',  # note the https://
     'http://127.0.0.1:8000',
 ]
 
-EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
-
-ANYMAIL = {
-    "SENDGRID_API_KEY": config("SENDGRID_API_KEY"),
-}
-
-DEFAULT_FROM_EMAIL = "TraitzHire <geofreyankinimbomgam@gmail.com>"
 SERVER_EMAIL = config('SERVER_EMAIL'),
 DATABASES = {
              "default" : dj_database_url.config("DATABASE_URL", default='')
