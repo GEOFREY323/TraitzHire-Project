@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from decouple import config, Csv
-import cloudinary
+import cloudinary, dj_database_url
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,7 +38,9 @@ ANYMAIL = {
 
 DEFAULT_FROM_EMAIL = "TraitzHire <geofreyankinimbomgam@gmail.com>"
 SERVER_EMAIL = config('SERVER_EMAIL'),
-DATABASE_URL = config('DATABASE_URL', default='')
+DATABASES = {
+             "default" : dj_database_url.config("DATABASE_URL", default='')
+             }
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
     'API_KEY':    config('CLOUDINARY_API_KEY'),
