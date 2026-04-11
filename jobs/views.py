@@ -87,18 +87,20 @@ def apply(request, pk):
             application.applicant = jobseeker
             application.job = job
             application.save()
-           # notify employer
+           try:
             send_new_applicant_email(
                 employer_email=job.employer.user.email,
                 job=job,
                 applicant_name=request.user.username
             )
 
-            # notify applicant
             send_application_received_email(
                 user=request.user,
                 job=job
             )
+
+        except Exception as e:
+            print("Email error:", e)
             # SEND EMAILS
             send_application_received_email(application)
             messages.success(request, "Application submitted successfully!")
