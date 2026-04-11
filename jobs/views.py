@@ -319,6 +319,8 @@ def create_job(request):
 
             messages.success(request, 'Job created!')
             return redirect('employer_dashboard')
+        else:
+            print("[create_job] Form validation failed. Errors:", form.errors)
     else:
         form = JobForm()
 
