@@ -269,19 +269,19 @@ def job_detail(request, pk):
 @employer_required
 def create_job(request):
     if request.method == 'POST':
-        form = JobForm(request.POST)
+        form = JobForm(request.POST, request.FILES)
+
         if form.is_valid():
             print("VALID ✅")
-        else:
-            print("ERRORS ❌:", form.errors)
+
             job = form.save(commit=False)
             job.employer = request.user.employerprofile
             job.save()
 
-            # ✅ Save selected checkbox skills
+            # Save many-to-many
             form.save_m2m()
 
-            # ✅ ADD THIS BLOCK (custom skills)
+            # Custom skills
             new_skills_input = request.POST.get("new_skills", "")
 
             if new_skills_input:
@@ -293,22 +293,19 @@ def create_job(request):
                 ]
 
                 for skill_name in new_skills_list:
-                    # Check if skill exists (case-insensitive)
                     skill_obj = Skill.objects.filter(
                         name__iexact=skill_name
                     ).first()
 
-                    # Create if not exists
                     if not skill_obj:
                         skill_obj = Skill.objects.create(
                             name=skill_name,
                             slug=slugify(skill_name)
                         )
 
-                    # Add to job
                     job.skills_required.add(skill_obj)
 
-            # Notify job seekers whose skills match the job's required skills.
+            # Notify seekers
             if job.skills_required.exists():
                 matching_seekers = JobSeekerProfile.objects.filter(
                     skills__in=job.skills_required.all()
@@ -323,11 +320,14 @@ def create_job(request):
 
             messages.success(request, 'Job created!')
             return redirect('employer_dashboard')
+
+        else:
+            print("ERRORS ❌:", form.errors)  # ONLY print, DO NOT SAVE
+
     else:
         form = JobForm()
 
     return render(request, 'jobs/create_job.html', {'form': form})
-
 @login_required
 @employer_required
 def edit_job(request, pk):
