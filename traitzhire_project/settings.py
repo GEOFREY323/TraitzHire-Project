@@ -39,8 +39,8 @@ ANYMAIL = {
 DEFAULT_FROM_EMAIL = "TraitzHire <geofreyankinimbomgam@gmail.com>"
 SERVER_EMAIL = config('SERVER_EMAIL'),
 DATABASES = {
-             "default" : dj_database_url.config("DATABASE_URL", default='')
-             }
+    "default": dj_database_url.config("DATABASE_URL", default='sqlite:///db.sqlite3')
+}
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
     'API_KEY':    config('CLOUDINARY_API_KEY'),
@@ -93,17 +93,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'traitzhire_project.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 
 # Password validation
