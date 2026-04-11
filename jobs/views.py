@@ -304,7 +304,7 @@ def create_job(request):
                     # Add to job
                     job.skills_required.add(skill_obj)
 
-            # Notify job seekers whose skills match the job's required skills
+            # Notify job seekers whose skills match the job's required skills.
             if job.skills_required.exists():
                 matching_seekers = JobSeekerProfile.objects.filter(
                     skills__in=job.skills_required.all()
