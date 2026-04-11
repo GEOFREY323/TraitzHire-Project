@@ -271,6 +271,9 @@ def create_job(request):
     if request.method == 'POST':
         form = JobForm(request.POST)
         if form.is_valid():
+            print("VALID ✅")
+        else:
+            print("ERRORS ❌:", form.errors)
             job = form.save(commit=False)
             job.employer = request.user.employerprofile
             job.save()
