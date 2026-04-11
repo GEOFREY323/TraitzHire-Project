@@ -87,21 +87,20 @@ def apply(request, pk):
             application.applicant = jobseeker
             application.job = job
             application.save()
-            # notify employer
+           # notify employer
             send_new_applicant_email(
-                user=job.employer.user,
-                message=f"{request.user.username} applied for your job '{job.title}'",
-                link=f"/applicant/{application.id}/"
+                employer_email=job.employer.user.email,
+                job=job,
+                applicant_name=request.user.username
             )
+
             # notify applicant
-            send_new_applicant_email(
+            send_application_received_email(
                 user=request.user,
-                message=f"You successfully applied for '{job.title}'",
-                link=f"/jobs/{job.id}/"
+                job=job
             )
             # SEND EMAILS
             send_application_received_email(application)
-            send_new_applicant_email(application)
             messages.success(request, "Application submitted successfully!")
             return redirect("job_detail", pk=job.pk) 
     else:
