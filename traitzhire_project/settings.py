@@ -27,7 +27,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost','traitzhire-project-production.up.railway.app',]
 CSRF_TRUSTED_ORIGINS = [
     'https://traitzhire-project-production.up.railway.app',  # note the https://
-    'http://127.0.0.1:8000',
+    # 'http://127.0.0.1:8000',
 ]
 
 EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
