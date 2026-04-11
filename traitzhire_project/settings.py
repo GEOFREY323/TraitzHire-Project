@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost','traitzhire-project.onrender.com',]
 CSRF_TRUSTED_ORIGINS = [
-    'https://traitzhire-project-production.up.railway.app',  # note the https://
+    'https://traitzhire-project.onrender.com',  # note the https://
     'http://127.0.0.1:8000',
 ]
 
