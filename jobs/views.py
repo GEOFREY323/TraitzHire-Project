@@ -87,6 +87,8 @@ def apply(request, pk):
             application.applicant = jobseeker
             application.job = job
             application.save()
+            application.save()
+
             try:
                 send_new_applicant_email(
                     employer_email=job.employer.user.email,
@@ -101,10 +103,9 @@ def apply(request, pk):
 
             except Exception as e:
                 print("Email error:", e)
-            # SEND EMAILS
-            send_application_received_email(application)
+
             messages.success(request, "Application submitted successfully!")
-            return redirect("job_detail", pk=job.pk) 
+            return redirect("job_detail", pk=job.pk)
     else:
         form = ApplicationForm()
     return render(request, "jobs/apply.html", {
