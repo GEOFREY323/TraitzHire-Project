@@ -386,7 +386,7 @@ def delete_job(request, pk):
         job.delete()
         messages.success(request, 'Job deleted!')
         return redirect('employer_dashboard')
-    return render(request, 'jobs/confirm_delete.html', {'job': job})
+    return render(request, 'jobs/delete_job.html', {'job': job})
 
 @login_required
 @employer_required
