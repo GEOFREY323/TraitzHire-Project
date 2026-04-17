@@ -114,7 +114,7 @@ traitzhire-project/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-org/traitzhire-project.git
+git clone https://github.com/GEOFREY323/traitzhire-project.git
 cd traitzhire-project
 ```
 
@@ -240,10 +240,10 @@ Set all required environment variables in the Railway project's **Variables** ta
 ## Author
 
 **GAM GEOFREY ANKINIMBOM**
-[TRAITZ TECH](https://traitztech.com)
+[Owner](https://gam-geofrey-ankinimbom-portfolio.netlify.app)
 
 ---
 
 ## License
 
-This project is proprietary software developed by TRAITZ TECH. All rights reserved. Unauthorised copying, distribution, or modification of this codebase without explicit written permission from TRAITZ TECH is strictly prohibited.
+This project is proprietary software developed by Gam Geofrey. All rights reserved. Unauthorised copying, distribution, or modification of this codebase without explicit written permission from Gam Geofrey Ankinimbom is strictly prohibited.
